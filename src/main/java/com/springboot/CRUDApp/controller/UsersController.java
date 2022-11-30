@@ -25,46 +25,52 @@ public class UsersController {
 		return "index";
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping(value = "/index")
+	public String indexIndex(Model model) {
+		model.addAttribute("users", userService.index());
+		return "index";
+	}
+
+	@GetMapping("/templates/{id}")
 	public String show(@PathVariable("id") int id, Model model) {
 		model.addAttribute("user", userService.show(id));
 		return "show";
 	}
 
-	@GetMapping("templates/new")
+	@GetMapping(value = "/templates/new")
 	public String newUser(@ModelAttribute("user") User user) {
 		return "new";
 	}
 
-	@PostMapping("/static")
+	@PostMapping(value = "/static")
 	public String create(@ModelAttribute("user") @Valid User user,
 						 BindingResult bindingResult) {
 		if (bindingResult.hasErrors())
 			return "new";
 
 		userService.save(user);
-		return "redirect:/";
+		return "redirect:/index";
 	}
 
-	@GetMapping("/{id}/edit")
+	@GetMapping("/templates/{id}/edit")
 	public String edit(Model model, @PathVariable("id") int id) {
 		model.addAttribute("user", userService.show(id));
 		return "edit";
 	}
 
-	@PatchMapping("/{id}")
+	@PatchMapping(value ="/index/{id}")
 	public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
 						 @PathVariable("id") int id) {
 		if (bindingResult.hasErrors())
 			return "edit";
 
 		userService.update(id, user);
-		return "redirect:/";
+		return "redirect:/index";
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping(value ="/templates/{id}")
 	public String delete(@PathVariable("id") int id) {
 		userService.delete(id);
-		return "redirect:/";
+		return "redirect:/index";
 	}
 }
