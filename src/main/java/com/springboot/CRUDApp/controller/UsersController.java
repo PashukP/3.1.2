@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-//	@RequestMapping("/users")
 public class UsersController {
 
 	private final UserService userService;
@@ -20,50 +19,50 @@ public class UsersController {
 		this.userService = userService;
 	}
 
-	@GetMapping()
+	@GetMapping(value = "/")
 	public String index(Model model) {
 		model.addAttribute("users", userService.index());
-		return "users/index";
+		return "index";
 	}
 
-	@GetMapping("/users/{id}")
+	@GetMapping("/{id}")
 	public String show(@PathVariable("id") int id, Model model) {
 		model.addAttribute("user", userService.show(id));
-		return "users/show";
+		return "show";
 	}
 
-	@GetMapping("/users/new")
+	@GetMapping("templates/new")
 	public String newUser(@ModelAttribute("user") User user) {
-		return "users/new";
+		return "new";
 	}
 
-	@PostMapping()
+	@PostMapping("/static")
 	public String create(@ModelAttribute("user") @Valid User user,
 						 BindingResult bindingResult) {
 		if (bindingResult.hasErrors())
-			return "users/new";
+			return "new";
 
 		userService.save(user);
 		return "redirect:/";
 	}
 
-	@GetMapping("/users/{id}/edit")
+	@GetMapping("/{id}/edit")
 	public String edit(Model model, @PathVariable("id") int id) {
 		model.addAttribute("user", userService.show(id));
-		return "users/edit";
+		return "edit";
 	}
 
-	@PatchMapping("/users/{id}")
+	@PatchMapping("/{id}")
 	public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
 						 @PathVariable("id") int id) {
 		if (bindingResult.hasErrors())
-			return "users/edit";
+			return "edit";
 
 		userService.update(id, user);
 		return "redirect:/";
 	}
 
-	@DeleteMapping("/users/{id}")
+	@DeleteMapping("/{id}")
 	public String delete(@PathVariable("id") int id) {
 		userService.delete(id);
 		return "redirect:/";
